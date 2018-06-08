@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/style.css'%}">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+</head>
+<body bgcolor="gainsboro">
+	<div class="header">
+		<a class="htitle"><b>Assessment</b></a><font class="welcome" style="float: right;">
+			{% if user.is_authenticated %}
+			Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
+			{% else %}
+			Welcome: Guest
+		</font>
+		{% endif %}
+	</div>
+	{% if user.is_authenticated %}
+	<br><br><br><br><br><h2>Not ready</h2>
+	{% else %}
+	<div id="box">
+	<div id="base">
+		Please login to continue<br><br>
+		<a href="{%url 'login'%}"><button class="Login">Login</button></a>
+	</div>
+	</div>
+	{% endif %}
+</body>
+</html>

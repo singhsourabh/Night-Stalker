@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'userauth/style.css'%}">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+</head>
+<body bgcolor="gainsboro">
+	<div class="header">
+		<a class="htitle">Assessment</a><font class="welcome" style="float: right;">{% if user.is_authenticated %}
+			Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
+			{% else %}
+			Welcome: Guest
+			{% endif %}
+		</font>
+	</div>
+	<div id="box">
+	<div id = "base">
+		{% if user.is_authenticated %}
+		Please logout then login<br>with another username.
+		{% else %}
+		<p id = "header"><B>Login</B></p><br>
+	<div if = "content">
+		<form method="POST" action="{% url 'login'%}">
+			{% csrf_token %}
+			Username: <input type="text" name="username" required="true" class="username"><br><br>
+			Password: <input type="password" name="password" required="true" class="password"><br><br>
+			<button type="submit" class="Login">Login</button>
+		</form>
+	</div>
+	{% endif %}
+</div>
+	{% if form.errors %}
+		<div class="wrong">Sorry, unrecognized username or password.</div>
+	{% endif %}
+</div>
+</body>
+</html>

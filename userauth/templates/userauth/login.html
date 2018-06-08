@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css'%}">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+</head>
+<body bgcolor="gainsboro">
+	<div class="header">
+		<a class="htitle">Assessment</a><font class="welcome" style="float: right;">Welcome: Guest<!-- <a href="#" class="logout"><b>Logout</b></a> --></font>
+	</div>
+	<div id="box">
+	<div id = "base">
+		<p id = "header"><B>Login</B></p><br>
+	<div if = "content">
+		<form method="POST" action="{url 'login'}">
+			{% csrf_token %}
+			Username: <input type="text" name="username" required="true" class="username"><br><br>
+			Password: <input type="password" name="password" required="true" class="password"><br><br>
+			<button type="submit" class="Login">Login</button>
+		</form>
+	</div>
+</div>
+	{% if form.errors %}
+		<div class="wrong">Sorry, unrecognized username or password.</div>
+	{% endif %}
+</div>
+</body>
+</html>
