@@ -1,30 +1,95 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Login</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/style.css'%}">
-	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
-</head>
-<body bgcolor="gainsboro">
-	<div class="header">
-		<a class="htitle"><b>Assessment</b></a><font class="welcome" style="float: right;">
-			{% if user.is_authenticated %}
-			Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
-			{% else %}
-			Welcome: Guest
-		</font>
-		{% endif %}
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'dashboard/style.css'%}">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    </head>
+    <body bgcolor="gainsboro">
+        <div class="header">
+            <a class="htitle"><b>Assessment</b></a>
+            <font class="welcome" style="float: right;">
+            {% if user.is_authenticated %}
+            Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
+        	</font>
+        	<br>
+        	<div>
+        		<a style="margin-right: 25px">Test Subject: 12 <!-- add total entity --></a>
+    	    	<a style="margin-right: 25px">Last Sync: 12:04:2018 <!-- add date --></a>
+	        	<a style="margin-right: 25px" class="add" id="addSub">Add</a>
+        		<a style="margin-right: 25px">Modify</a>
+        		<a style="margin-right: 25px">Remove</a>
+        	</div>
+        	<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2>Add Test Subject</h2>
+    </div>
+    <div class="modal-body">
+    	<form method="POST" action="#" class="addform">
+    		{% csrf_token %}
+    		<p><label for="handle">Name: </label><input type="text" id="handle" class="name" required="true" placeholder="Enter name"></p>
+    		<p><label for="ccname">CodeChef: </label><input type="text" name="ccname" class="cc" placeholder="Enter codechef username"></p>
+			<p><label for="spojname">SPOJ: </label><input type="text" id="spojname" class="spoj" placeholder="Enter spoj username"></p>
+			<p><label for="cfname">CodeForces: </label><input type="text" name="cfname" class="cf" placeholder="Enter codeforces username"></p><br>
+			<div style="display: block; text-align: center;"><button type="submit" class="add" style="margin-bottom: 10px">ADD</button></div>
+		</form>
+    </div>
+    <div class="modal-footer">
+      
+    </div>
+  	</div>
+
 	</div>
-	{% if user.is_authenticated %}
-	<br><br><br><br><br><h2>Not ready</h2>
-	{% else %}
-	<div id="box">
-	<div id="base">
-		Please login to continue<br><br>
-		<a href="{%url 'login'%}"><button class="Login">Login</button></a>
-	</div>
-	</div>
-	{% endif %}
-</body>
+            {% else %}
+            <font class="welcome" style="float: right;">
+            	Welcome: Guest
+            </font>
+        {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+        <br><br><br><br>
+        <div>
+        	<!-- add content box -->
+    	</div>
+        {% else %}
+        <div id="box">
+            <div id="base">
+                Please login to continue<br><br>
+                <a href="{%url 'login'%}"><button class="Login">Login</button></a>
+            </div>
+        </div>
+        {% endif %}
+        <script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("addSub");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+    </body>
 </html>
