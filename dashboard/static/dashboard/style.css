@@ -27,11 +27,13 @@ body{
 form{
 	font-size: 20px;
 }
-p     { display: table-row;  }
-label { display: table-cell; text-align: right; width:40%;}
-input { display: table-cell;  width:50%}
+p.inprow     { display: table-row;  }
+label.labl { display: table-cell; text-align: right; width:40%;}
+/* input.name, input.cc, input.spoj, input.cf { display: table-cell;  width:50%} */
 
 .name, .cc, .spoj, .cf{
+	display: table-cell;
+	width:50%;
 	padding: 9px 15px 5px 15px;
 	margin: 10px;
 	border: none;
