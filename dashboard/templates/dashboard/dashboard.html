@@ -35,7 +35,8 @@
     		<p class="inprow"><label for="ccname" class="labl">CodeChef: </label>{{UserForm.codechef}}</p>
 			<p class="inprow"><label for="spojname" class="labl">SPOJ: </label>{{UserForm.spoj}}</p>
 			<p class="inprow"><label for="cfname" class="labl">CodeForces: </label>{{UserForm.codeforce}}</p><br>
-			<div style="display: block; text-align: center;"><button type="submit" class="add" style="margin-bottom: 10px">ADD</button></div>
+            <div style="display: block; text-align: center;"><button type="submit" class="add" style="margin-bottom: 10px">ADD</button>
+                <button type="reset" class="add" style="margin-bottom: 10px; background-color: slategray">RESET</button></div>
 		</form>
     </div>
     <div class="modal-footer"></div>
@@ -48,9 +49,74 @@
         {% endif %}
         </div>
         {% if user.is_authenticated %}
-        <br><br><br><br>
+        <br><br><br><br><br><br>
         <div id="content">
-        	<!-- add content box -->
+            <!-- add content box -->
+            {% for UL in UserList %}
+            <section>
+                    <!--for demo wrap-->
+                    <h1>{{UL.name}}</h1>
+                    <div class="tbl-header">
+                      <table cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                          <tr>
+                            <th>Platform</th>
+                            <th>Submissions</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                    <div class="tbl-content">
+                      <table cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                          <tr>
+                              <td>CODECHEF</td>
+                              <td>
+                              {% if UL.codechef %}
+                                {{UL.totalCC}}
+                                {% else %}
+                                <font style="color: sandybrown;">Not yet Added</font>
+                                {% endif %}
+                            </td>
+                          
+                          </tr>
+                          <tr>
+                            <td>SPOJ</td>
+                            <td>
+                                {% if UL.spoj %}
+                                {{UL.totalSJ}}
+                                  {% else %}
+                                  <font style="color: sandybrown;">Not yet Added</font>
+                                  {% endif %}
+                            </td>
+                            
+                          </tr>
+                          <tr>
+                            <td>CODEFORCES</td>
+                            <td>
+                                {% if UL.codeforce %}
+                                {{UL.totalCF}}
+                                  {% else %}
+                                  <font style="color: sandybrown;">Not yet Added</font>
+                                  {% endif %}
+                              </td>
+                            
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="datepicker">
+                        <form method="POST" class="timeRanger" id="{{UL.name}}" data="{{UL.name}}" datacc="{{UL.codechef}}" datasj="{{UL.spoj}}" datacf="{{UL.codeforce}}">
+                            {% csrf_token %}
+                        <label for="dateitem" class="di">Pick the date range</label><br>
+                        <input type="date" name="dateitem" id="fromdate" class="datet"> 
+                        <input type="date" name="dateitem" id="todate" class="datet"><br>
+                        <button type="submit" class="add">CHECK</button>
+                        </form>
+                    </div>
+                    <br>
+                  </section>
+            {% endfor %}
     	</div>
         {% else %}
         <div id="box">
@@ -95,8 +161,34 @@
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function(){
+                    //$(".addform").load(" .addform");
                     $("#content").load(" #content");
-                    $(".addform").load(" .addform")
+                }
+            })
+        });
+        $(".timeRanger").submit(function(et){
+            
+            var ID = $(this).attr('data');
+            var CCID = $(this).attr('datacc');
+            var SJID = $(this).attr('datasj');
+            var CFID = $(this).attr('datacf');
+            console.log('request send');
+            et.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url 'dQ' %}',
+                data:{
+                    From:$('#fromdate').val(),
+                    To:$('#todate').val(),
+                    id: ID,
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                dataType: 'json',
+                success:function(packet){
+                    console.log('succeed')
+                    $("#"+CCID).text(packet.cc);
+                    $("."+SJID).text(packet.spoj);
+                    $("."+CFID).text(packet.cf);
                 }
             })
         });
