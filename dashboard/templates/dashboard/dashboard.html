@@ -73,7 +73,7 @@
                               <td>CODECHEF</td>
                               <td>
                               {% if UL.codechef %}
-                                {{UL.totalCC}}
+                                <a id="{{UL.codechef}}">{{UL.totalCC}}</a>
                                 {% else %}
                                 <font style="color: sandybrown;">Not yet Added</font>
                                 {% endif %}
@@ -84,7 +84,7 @@
                             <td>SPOJ</td>
                             <td>
                                 {% if UL.spoj %}
-                                {{UL.totalSJ}}
+                                <a id="{{UL.spoj}}">{{UL.totalSJ}}</a>
                                   {% else %}
                                   <font style="color: sandybrown;">Not yet Added</font>
                                   {% endif %}
@@ -95,7 +95,7 @@
                             <td>CODEFORCES</td>
                             <td>
                                 {% if UL.codeforce %}
-                                {{UL.totalCF}}
+                                <a id="{{UL.codeforce}}">{{UL.totalCF}}</a>
                                   {% else %}
                                   <font style="color: sandybrown;">Not yet Added</font>
                                   {% endif %}
@@ -161,7 +161,10 @@
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function(){
-                    //$(".addform").load(" .addform");
+                    $(".name").load(" .name");
+                    $(".cc").load(" .cc");
+                    $(".spoj").load(" .spoj");
+                    $(".cf").load(" .cf");
                     $("#content").load(" #content");
                 }
             })
@@ -186,9 +189,11 @@
                 dataType: 'json',
                 success:function(packet){
                     console.log('succeed')
+                    console.log(packet.cc);
+                    console.log(typeof(packet.cc))
                     $("#"+CCID).text(packet.cc);
-                    $("."+SJID).text(packet.spoj);
-                    $("."+CFID).text(packet.cf);
+                    $("#"+SJID).text(packet.spoj);
+                    $("#"+CFID).text(packet.cf);
                 }
             })
         });

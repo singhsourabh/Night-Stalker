@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .forms import NewUser
 from .models import User, Sj, Cc, Cf
-from .tasks import codechefCrawler, spojCrawler, codeforceCrawler
+from .crawler import codechefCrawler, spojCrawler, codeforceCrawler
+from dateutil.parser import parse
+from datetime import date, datetime
 
 def dash(request):
 	UserList = User.objects.all()
@@ -21,11 +23,11 @@ def add(request):
 		spojName = request.POST['spoj']
 		cfName = request.POST['codeforce']
 		if ccName:
-			codechefCrawler(ccName)
+			codechefCrawler.delay(ccName)
 		if spojName:
-			spojCrawler(spojName)
+			spojCrawler.delay(spojName)
 		if cfName:
-			codeforceCrawler(cfName)
+			codeforceCrawler.delay(cfName)
 		print('success')
 	return HttpResponse('')
 
@@ -41,9 +43,9 @@ def dateQ(request):
 	}
 	return JsonResponse(packet)
 
-def dateCc(request):
-	username = request.GET.get('id', None)
-	packet = {
-		'cc': Cc.objects.filter(userid__exact=username).count()
-	}
-	return JsonResponse(packet)
+# def dateCc(request):
+# 	username = request.GET.get('id', None)
+# 	packet = {
+# 		'cc': Cc.objects.filter(userid__exact=username).count()
+# 	}
+# 	return JsonResponse(packet)
