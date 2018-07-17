@@ -15,8 +15,7 @@
         	</font>
         	<br>
         	<div>
-        		<a style="margin-right: 25px">Test Subject: 12 <!-- add total entity --></a>
-    	    	<a style="margin-right: 25px">Last Sync: 12:04:2018 <!-- add date --></a>
+        		<a style="margin-right: 25px">Profiles :  {{UserList|length}}<!-- add total entity --></a>
 	        	<a style="margin-right: 25px" class="add" id="addSub">Add</a>
         		<a style="margin-right: 25px">Modify</a>
         		<a style="margin-right: 25px">Remove</a>
@@ -188,7 +187,7 @@
                 },
                 dataType: 'json',
                 success:function(packet){
-                    console.log('succeed')
+                    console.log('succeed' + packet.cc + packet.spoj + packet.cf)
                     console.log(packet.cc);
                     console.log(typeof(packet.cc))
                     $("#"+CCID).text(packet.cc);

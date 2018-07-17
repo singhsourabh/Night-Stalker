@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .forms import NewUser
 from .models import User, Sj, Cc, Cf
-from .crawler import codechefCrawler, spojCrawler, codeforceCrawler
+from .crawler import codechefCrawler, spojCrawler, codeforceCrawler, updater
 from dateutil.parser import parse
 from datetime import date, datetime
 
@@ -12,6 +12,7 @@ def dash(request):
 	spojList = Sj.objects.all()
 	cfList = Cf.objects.all()
 	UserForm = NewUser()
+	updater.delay()
 	context = {'UserList':UserList, 'ccList': ccList, 'spojList': spojList, 'cfList': cfList, 'UserForm':UserForm}
 	return render(request, 'dashboard/dashboard.html', context)
 
@@ -32,15 +33,18 @@ def add(request):
 	return HttpResponse('')
 
 def dateQ(request):
-	From = request.POST['From']
-	To = request.POST['To']
+	Fm = request.POST['From']
+	T = request.POST['To']
 	Id = request.POST['id']
+	From = parse(Fm).date()
+	To = parse(T).date()
 	Handler = User.objects.get(name__exact=Id)
 	packet = {
-		'cc': Cc.objects.filter(handle_id=Handler.pk).filter(date__lte=To).filter(date__gte=From).count(),
-		'spoj': Sj.objects.filter(handle_id=Handler.pk).filter(date__lte=To).filter(date__gte=From).count(),
-		'cf': Cf.objects.filter(handle_id=Handler.pk).filter(date__lte=To).filter(date__gte=From).count(),
+		'cc': Cc.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count(),
+		'spoj': Sj.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count(),
+		'cf': Cf.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count(),
 	}
+	print(Cc.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count())
 	return JsonResponse(packet)
 
 # def dateCc(request):

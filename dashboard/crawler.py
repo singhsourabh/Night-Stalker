@@ -5,6 +5,7 @@ from urllib.request import urlopen as uReq
 from .models import User, Sj, Cc, Cf
 from dateutil.parser import parse
 from datetime import date, datetime
+from django.db.models import F
 
 @shared_task
 def getDate(url):
@@ -32,12 +33,12 @@ def spojCrawler(username):
                 pass
             else:
                 entry = entry +1
-                newEntry = Sj(handle=handler, date=parse(getDate(x.a["href"])).date())
+                newEntry = Sj(handle=handler, problem=x.a.text.strip(), date=parse(getDate(x.a["href"])).date())
                 newEntry.save()
     handler.last_sync = date.today().strftime('%Y-%m-%d')
-    handler.totalCC = Cc.objects.filter(handle_id=handler.pk).count()
-    handler.totalSJ = Sj.objects.filter(handle_id=handler.pk).count()
-    handler.totalCF = Cf.objects.filter(handle_id=handler.pk).count()
+    handler.totalCC = F('totalCC')
+    handler.totalSJ = F('totalSJ')+entry
+    handler.totalCF = F('totalCF')
     handler.save()
     print('success spoj', entry)
     
@@ -62,17 +63,22 @@ def codechefCrawler(username):
         for x in content[::-1]:
             entry = entry +1
             Date = ccDate(x['href'])
+            handler.totalCC = F('totalCC')+1
             if 'ago' in Date:
-                newEntry = Cc(handle=handler, date=date.today())
+                newEntry = Cc(handle=handler, problem=x.text, date=date.today())
                 newEntry.save()
             else:
-                newEntry = Cc(handle=handler, date=parse(ccDate(x['href'])).date())
+                dt = Date
+                dt = dt[:15] + '20' + dt[15:]
+                dt = dt[9:]
+                newEntry = Cc(handle=handler, problem=x.text, date=datetime.strptime( dt, "%d/%m/%Y" ).date())
+                #print(datetime.strptime( dt, "%d/%m/%Y" ).month)
                 newEntry.save()
             
     handler.last_sync = date.today().strftime('%Y-%m-%d')
-    handler.totalCC = Cc.objects.filter(handle_id=handler.pk).count()
-    handler.totalSJ = Sj.objects.filter(handle_id=handler.pk).count()
-    handler.totalCF = Cf.objects.filter(handle_id=handler.pk).count()
+    handler.totalCC = F('totalCC')+entry
+    handler.totalSJ = F('totalSJ')
+    handler.totalCF = F('totalCF')
     handler.save()
     print('success cc', entry)
 
@@ -92,12 +98,12 @@ def data(url, index, username):
         for x in content:
             info = x.findAll('td', class_='status-small')
             entry = entry +1
-            newEntry = Cf(handle=handler, date=parse(info[0].text.strip()).date())
+            newEntry = Cf(handle=handler, problem=info[1].a.text.strip(), date=parse(info[0].text.strip()).date())
             newEntry.save()
     handler.last_sync = date.today().strftime('%Y-%m-%d')
-    handler.totalCC = Cc.objects.filter(handle_id=handler.pk).count()
-    handler.totalSJ = Sj.objects.filter(handle_id=handler.pk).count()
-    handler.totalCF = Cf.objects.filter(handle_id=handler.pk).count()
+    handler.totalCC = F('totalCC')
+    handler.totalSJ = F('totalSJ')
+    handler.totalCF = F('totalCF')+entry
     handler.save()
     print('success cf', entry)
 
@@ -108,7 +114,6 @@ def codeforceCrawler(username):
     html = uClient.read()
     uClient.close()
     page = soup(html, 'lxml')
-    # maxIndex = page.find(lambda tag: tag.name == 'div' and tag.get('class') == ['pagination']).ul
     maxIndex = [int(x.text) for x in page.findAll('span', class_='page-index')]
     maxId = 1
     if maxIndex:
@@ -117,9 +122,72 @@ def codeforceCrawler(username):
         data(url, maxId, username)
 
 @shared_task
-def updater(handle):
-	handler = User.objects.get(name_exact=handle)
-	handler.totalCC = Cc.objects.filter(handle_id=handler.pk).count()
-	handler.totalSJ = Sj.objects.filter(handle_id=handler.pk).count()
-	handler.totalCF = Cf.objects.filter(handle_id=handler.pk).count()
-	handler.save()
+def updater():
+    for users in User.objects.all():
+        if users.last_sync != date.today():
+
+            #codechef
+            if users.codechef:
+                page  = requests.get('https://www.codechef.com/users/'+users.codechef)
+                souper = soup(page.content, 'lxml')
+                content = souper.find('section', class_='rating-data-section problems-solved')
+                entry = users.totalCC
+                if content:
+                    content = content.article
+                    content = content.findAll('a')
+                for x in content[::-1]:
+                    if not Cc.objects.filter(handle_id__exact=users.pk).filter(problem__exact=x.text):
+                        entry = entry +1
+                        Date = ccDate(x['href'])
+                        users.totalCC = F('totalCC')+1
+                        if 'ago' in Date:
+                            newEntry = Cc(handle=users, problem=x.text, date=date.today())
+                            newEntry.save()
+                        else:
+                            dt = Date
+                            dt = dt[:15] + '20' + dt[15:]
+                            dt = dt[9:]
+                            newEntry = Cc(handle=users, problem=x.text, date=datetime.strptime( dt, "%d/%m/%Y" ).date())
+                            #print(datetime.strptime( dt, "%d/%m/%Y" ).month)
+                            newEntry.save()
+                    else:
+                        break
+                users.last_sync = date.today().strftime('%Y-%m-%d')
+                users.totalCC = F('totalCC')+entry
+                users.totalSJ = F('totalSJ')
+                users.totalCF = F('totalCF')
+                users.save()
+                print('success update cc', entry)
+
+                #spoj
+            if users.spoj:
+                url = 'http://www.spoj.com/users/'+ users.spoj
+                uClient = uReq(url)
+                html = uClient.read()
+                uClient.close()
+                page = soup(html, 'lxml')
+                content = page.find('table', class_='table table-condensed')
+                entry = users.totalSJ
+                if content:
+                    content = content.findAll('td')
+                    for x in content:
+                        if not Sj.objects.filter(handle_id__exact=users.pk).filter(problem__exact=x.a.text.strip()):
+                            if(x.a.text == ''):
+                                pass
+                            else:
+                                entry = entry +1
+                                newEntry = Sj(handle=users, problem=x.a.text.strip(), date=parse(getDate(x.a["href"])).date())
+                                newEntry.save()
+                users.last_sync = date.today().strftime('%Y-%m-%d')
+                users.totalCC = F('totalCC')
+                users.totalSJ = F('totalSJ')+entry
+                users.totalCF = F('totalCF')
+                users.save()
+                print('success update spoj', entry)
+
+            if users.codeforce:
+                #codeforces
+                cfDel = Sj.objects.filter(handle_id__exact=users.pk)
+                cfDel.delete()
+                codeforceCrawler(users.codeforce)
+                print('success update cf')

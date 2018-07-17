@@ -15,21 +15,24 @@ class User(models.Model):
 
 class Sj(models.Model):
     handle = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.CharField(max_length=50, null=True)
     date = models.DateField()
 
     def __str__(self):
-        return self.handle.name
+        return self.problem
 
 class Cc(models.Model):
     handle = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.CharField(max_length=50, null=True)
     date = models.DateField()
 
     def __str__(self):
-        return self.handle.name
+        return self.problem
 
 class Cf(models.Model):
     handle = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.CharField(max_length=50, null=True)
     date = models.DateField()
 
     def __str__(self):
-        return self.handle.name
+        return self.problem
