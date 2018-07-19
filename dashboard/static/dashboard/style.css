@@ -47,6 +47,21 @@ label.labl { display: table-cell; text-align: right; width:40%;}
 .name:focus, .cc:focus, .spoj:focus, .cf:focus {
     border: 3px solid indigo;
 }
+.mcc, .mspoj, .mcf{
+	display: table-cell;
+	width:50%;
+	padding: 9px 15px 5px 15px;
+	border: none;
+	width: 165px;
+	font-family: 'Josefin Sans', sans-serif;
+	border: 2px solid rgb(60, 60, 247);
+	-webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.mcc:focus, .mspoj:focus, .mcf:focus {
+    border: 2px solid midnightblue;
+}
 #header{
 	font-size: 30px;
 	margin: 0px 0px;
@@ -98,7 +113,7 @@ button{
 	text-decoration: none;
 	border: none;
 	margin-left: 10px;
-	background-color: darkorange;
+	background-color: slateblue;
 	padding: 10px 20px; 
 	color: white;
 	display: inline-block;
@@ -113,6 +128,40 @@ button{
 	display: inline-block;	
 	cursor: pointer;
 }
+
+.modify{
+	text-decoration: none;
+	border: none;
+	margin-left: 10px;
+	background-color: darkorange;
+	padding: 10px 20px; 
+	color: white;
+	display: inline-block;	
+	cursor: pointer;
+}
+.remove{
+	text-decoration: none;
+	border: none;
+	margin-left: 10px;
+	background-color: rgb(253, 32, 80);
+	padding: 10px 20px; 
+	color: white;
+	display: inline-block;	
+	cursor: pointer;
+}
+
+.delete{
+	
+	text-decoration: none;
+	border: none;
+	text-align: center;
+	background-color: rgb(253, 32, 80);
+	padding: 10px 20px; 
+	color: white;
+	display: inline-block;	
+	cursor: pointer;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -128,20 +177,24 @@ button{
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content, .mmodal-content{
     position: relative;
     background-color: #fefefe;
     margin: auto;
     padding: 0;
     border: 1px solid #888;
     width: 50%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	overflow: auto;
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
     animation-duration: 0.4s
 }
-
+#mcontent{
+	overflow: auto;
+	
+}
 /* Add Animation */
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0} 
@@ -154,15 +207,16 @@ button{
 }
 
 /* The Close Button */
-.close {
+.close, .mclose, .rclose{
     color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus, 
+.mclose:hover, .mclose:focus, 
+.rclose:hover, .rclose:focus{
     color: #000;
     text-decoration: none;
     cursor: pointer;
@@ -174,18 +228,66 @@ button{
     color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.mmodal-header {
+    padding: 2px 16px;
+    background-color: rgb(252, 147, 18);
+    color: white;
+}
 
+.rmodal-header {
+    padding: 2px 16px;
+    background-color: rgb(253, 32, 80);
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;
+	height: 300px;
+	overflow: auto;
+}
+
+.rmodal-body {padding: 2px 16px;
+		height: 300px;
+		overflow: auto;
+		
+}
+	
 .modal-footer {
     padding: 2px 16px;
     background-color: #5cb85c;
     color: white;
 }
 
-#content{
+.mmodal-footer {
+    padding: 2px 16px;
+    background-color: rgb(252, 147, 18);
+    color: white;
+}
+
+.rmodal-footer {
+    padding: 2px 16px;
+    background-color: rgb(253, 32, 80);
+    color: white;
+}
+
+#content, #mcontent{
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
+}
+
+.parent {
+	display: flex;
+	flex-wrap: wrap;
+}
+  
+.child {
+	display: inline-block;
+	background: whitesmoke;
+	border: 2px solid grey;
+    margin:10px 0 0 2%;
+    height:50px;
+	width: 47%;
+	
 }
 h1{
 	font-size: 30px;
@@ -230,6 +332,44 @@ table{
 	  width: 400px;
 	  margin: 10px;
   }
+
+.profile{
+	margin-bottom: 5px;
+	color: indigo;
+	border-collapse: collapse;
+	width: 100%;
+	border: 1px solid #ddd;
+	/* border-color: #000; */
+}
+
+.mname{
+	background-color: rgba(0, 0, 0, 0.116);
+	color: midnightblue;
+	text-align: left;
+	padding: 10px;
+	/* border: 1px solid #ddd; */
+	/* border-color: #000; */
+}
+
+.mcsc{
+	border: 1px solid #ddd;
+	color: midnightblue;
+	text-align: left;
+    padding: 8px;
+    
+	/* color: black;
+	border-color: #000; */
+}
+.save{
+	text-decoration: none;
+	border: none;
+	background-color: rgb(44, 156, 156);
+	padding: 10px 20px; 
+	color: white;
+	display: inline-block;	
+	cursor: pointer;
+}
+
   .datepicker{
 	text-align: center;
   }
@@ -258,3 +398,68 @@ table{
 	color: #fff;
 	text-transform: uppercase;
   }
+
+  .container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

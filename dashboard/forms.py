@@ -11,3 +11,8 @@ class NewUser(forms.ModelForm):
             'spoj' : forms.TextInput(attrs={'id':'spojname', 'class':'spoj', 'placeholder':'Enter spoj username'}),
             'codeforce' : forms.TextInput(attrs={'id':'cfname', 'name':'cfname', 'class':'cf', 'placeholder':'Enter codeforces username'})
         }
+
+class Modify(forms.Form):
+    mcodechef = forms.CharField(max_length=25, required=False, widget=forms.TextInput(attrs={'class':'mcc', 'placeholder':'leave blank for no change'}))
+    mspoj = forms.CharField(max_length=25, required=False, widget=forms.TextInput(attrs={'class':'mspoj', 'placeholder':'leave blank for no change'}))
+    mcodeforce = forms.CharField(max_length=25, required=False, widget=forms.TextInput(attrs={'class':'mcf', 'placeholder':'leave blank for no change'}))

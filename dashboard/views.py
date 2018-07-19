@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import NewUser
+from .forms import NewUser, Modify
 from .models import User, Sj, Cc, Cf
 from .crawler import codechefCrawler, spojCrawler, codeforceCrawler, updater
 from dateutil.parser import parse
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 def dash(request):
 	UserList = User.objects.all()
@@ -12,8 +12,9 @@ def dash(request):
 	spojList = Sj.objects.all()
 	cfList = Cf.objects.all()
 	UserForm = NewUser()
+	mod = Modify()
 	updater.delay()
-	context = {'UserList':UserList, 'ccList': ccList, 'spojList': spojList, 'cfList': cfList, 'UserForm':UserForm}
+	context = {'UserList':UserList, 'ccList': ccList, 'spojList': spojList, 'cfList': cfList, 'UserForm':UserForm, 'mod':mod}
 	return render(request, 'dashboard/dashboard.html', context)
 
 def add(request):
@@ -47,9 +48,32 @@ def dateQ(request):
 	print(Cc.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count())
 	return JsonResponse(packet)
 
-# def dateCc(request):
-# 	username = request.GET.get('id', None)
-# 	packet = {
-# 		'cc': Cc.objects.filter(userid__exact=username).count()
-# 	}
-# 	return JsonResponse(packet)
+def modify(request, userid):
+	nCc = request.POST['mcodechef']
+	nSj = request.POST['mspoj']
+	nCf = request.POST['mcodeforce'] 
+	users = User.objects.get(pk=userid)
+	ucc = users.codechef
+	usj = users.spoj
+	ucf = users.codeforce
+	if nCc:
+		Cc.objects.filter(handle_id__exact=userid).delete()
+		ucc = nCc
+	if nSj:
+		Sj.objects.filter(handle_id__exact=userid).delete()
+		usj = nSj
+	if nCf:
+		Cf.objects.filter(handle_id__exact=userid).delete()
+		ucf = nCf
+	users.last_sync = date.today() -timedelta(days=1)
+	users.codechef = ucc
+	users.spoj = usj
+	users.codeforce = ucf
+	users.save()
+	return redirect('dashboard')
+	
+def remove(request):
+	opt = request.POST.getlist('checks[]')
+	for item in opt:
+		User.objects.get(pk=int(item)).delete()
+	return redirect('dashboard')

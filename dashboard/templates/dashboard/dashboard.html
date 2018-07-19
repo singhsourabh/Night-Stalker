@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Login</title>
+        <title>Assessment</title>
         <link rel="stylesheet" type="text/css" href="{% static 'dashboard/style.css'%}">
         <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
     </head>
@@ -14,18 +14,18 @@
             Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
         	</font>
         	<br>
-        	<div>
-        		<a style="margin-right: 25px">Profiles :  {{UserList|length}}<!-- add total entity --></a>
+        	<div class="toolbox">
+        		<a style="margin-right: 25px" class="profilec">Profiles : {{UserList|length}}</a>
 	        	<a style="margin-right: 25px" class="add" id="addSub">Add</a>
-        		<a style="margin-right: 25px">Modify</a>
-        		<a style="margin-right: 25px">Remove</a>
+        		<a style="margin-right: 25px" class="modify" id="modSub">Modify</a>
+        		<a style="margin-right: 25px" class="remove" id="remSub">Remove</a>
         	</div>
         	<div id="myModal" class="modal">
                 
   <div class="modal-content">
     <div class="modal-header">
       <span class="close">&times;</span>
-      <h2>Add Test Subject</h2>
+      <h2>Add User Details</h2>
     </div>
     <div class="modal-body">
     	<form method="POST" class="addform">
@@ -40,7 +40,64 @@
     </div>
     <div class="modal-footer"></div>
   	</div>
-	</div>
+    </div>
+
+    <!-- modify modal-->
+    <div id="myModl" class="modal">
+                
+        <div class="mmodal-content">
+          <div class="mmodal-header">
+            <span class="mclose">&times;</span>
+            <h2>Modify User Details</h2>
+          </div>
+          <div class="modal-body">
+              <div id="mcontent">
+                {% for user in UserList %}
+                <form method="POST" action="{% url 'modify' user.pk %}">
+                    {% csrf_token %}
+                <table class="profile">
+                    <tr>
+                        <td colspan=2 class="mname"><a style="font-size: 1.5em; text-transform:uppercase"><b>{{user.name}}</b></a></td>
+                        <td class="mname" style="text-align: center;"><button class="save" type="submit">Save</button></td>
+                    </tr>
+                    <tr>
+                        <td class="mcsc">Codechef<br>{{mod.mcodechef}}</td>
+                        <td class="mcsc">Spoj<br>{{mod.mspoj}}</td>
+                        <td class="mcsc">Codeforces<br>{{mod.mcodeforce}}</td>
+                    </tr>
+                </table>
+                </form>
+                {% endfor %}
+              </div>
+          </div>
+          <div class="mmodal-footer"></div>
+            </div>
+          </div>
+        <!-- remove modal -->
+        <div id="myMdl" class="modal">
+                
+            <div class="modal-content">
+              <div class="rmodal-header">
+                <span class="rclose">&times;</span>
+                <h2>Remove User Profiles</h2>
+              </div>
+              <div class="rmodal-body">
+                <form method="POST" action="{% url 'remove' %}">
+                    {% csrf_token %}
+                <div class="parent">
+                    {% for user in UserList %}
+                    <div class="child"><label class="container" style="vertical-align: middle; line-height: 50px;">{{user.name}}
+                            <input type="checkbox" name="checks[]" value="{{user.pk}}">
+                            <span class="checkmark"></span>
+                          </label></div>
+                    {% endfor %}
+                  </div>
+                  <div style="text-align: center; margin: 10px;"><button class="delete">Delete</button></div>
+                </form>
+              </div>
+              <div class="rmodal-footer"></div>
+                </div>
+              </div>
             {% else %}
             <font class="welcome" style="float: right;">
             	Welcome: Guest
@@ -116,6 +173,11 @@
                     <br>
                   </section>
             {% endfor %}
+            {% if not userList %}
+            <div style="width: 100%;color:midnightblue"><p style="text-align: center; font-size: 100px; margin-top: 12%; margin-bottom: 0;">NOTHING!!</p><p style="text-align: center; font-size: 50px; margin: 0;">Your list is empty.</p></div>      
+            
+            {% endif %}
+
     	</div>
         {% else %}
         <div id="box">
@@ -142,7 +204,43 @@
                 if (event.target == modal) {
                     modal.style.display = "none";
                 }
+                else if (event.target == modl) {
+                    modl.style.display = "none";
+                }
+                else if (event.target == mdl) {
+                    mdl.style.display = "none";
+                }
             }
+            // modify
+            var modl = document.getElementById('myModl');
+            var bt = document.getElementById("modSub");
+            var spn = document.getElementsByClassName("mclose")[0];
+
+            bt.onclick = function() {
+                modl.style.display = "block";
+            }
+
+            spn.onclick = function() {
+                modl.style.display = "none";
+            }
+
+            
+            //remove
+            var mdl = document.getElementById('myMdl');
+            var b = document.getElementById("remSub");
+            var sn = document.getElementsByClassName("rclose")[0];
+
+            b.onclick = function() {
+                mdl.style.display = "block";
+            }
+
+            sn.onclick = function() {
+                mdl.style.display = "none";
+            }
+
+            
+
+
         </script>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -165,6 +263,8 @@
                     $(".spoj").load(" .spoj");
                     $(".cf").load(" .cf");
                     $("#content").load(" #content");
+                    //$(".profilec").load(" .profilec");
+                    
                 }
             })
         });

@@ -103,7 +103,7 @@ def data(url, index, username):
     handler.last_sync = date.today().strftime('%Y-%m-%d')
     handler.totalCC = F('totalCC')
     handler.totalSJ = F('totalSJ')
-    handler.totalCF = F('totalCF')+entry
+    handler.totalCF = F('totalCF')+entry -handler.totalCF
     handler.save()
     print('success cf', entry)
 
@@ -124,7 +124,7 @@ def codeforceCrawler(username):
 @shared_task
 def updater():
     for users in User.objects.all():
-        if users.last_sync != date.today():
+        if users.last_sync != date.today() and users.last_sync:
 
             #codechef
             if users.codechef:
@@ -153,7 +153,7 @@ def updater():
                     else:
                         break
                 users.last_sync = date.today().strftime('%Y-%m-%d')
-                users.totalCC = F('totalCC')+entry
+                users.totalCC = F('totalCC')+entry -users.totalCC
                 users.totalSJ = F('totalSJ')
                 users.totalCF = F('totalCF')
                 users.save()
@@ -180,14 +180,14 @@ def updater():
                                 newEntry.save()
                 users.last_sync = date.today().strftime('%Y-%m-%d')
                 users.totalCC = F('totalCC')
-                users.totalSJ = F('totalSJ')+entry
+                users.totalSJ = F('totalSJ')+entry -users.totalSJ
                 users.totalCF = F('totalCF')
                 users.save()
                 print('success update spoj', entry)
 
             if users.codeforce:
                 #codeforces
-                cfDel = Sj.objects.filter(handle_id__exact=users.pk)
+                cfDel = Cf.objects.filter(handle_id__exact=users.pk)
                 cfDel.delete()
                 codeforceCrawler(users.codeforce)
                 print('success update cf')
