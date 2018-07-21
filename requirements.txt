@@ -1,4 +1,4 @@
-psycopg2==2.7.5lxml==4.2.1
+lxml==4.2.1psycopg2==2.7.5
 beautifulsoup4==4.6.0
 
 bs4==0.0.1
