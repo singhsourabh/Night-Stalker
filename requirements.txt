@@ -9,4 +9,4 @@ gunicorn==19.9.0
 
 requests==2.19.1
 whitenoise==3.3.1
-python-dateutil==2.7.3lxml
+lxml==4.2.1python-dateutil==2.7.3
