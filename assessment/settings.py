@@ -25,7 +25,7 @@ SECRET_KEY = 'yqw&933#rd&ez@-k@k%ll8rt#_cacw)y1qy$fbfhr%d8q+_*+3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nightstalker.herokuapp.com']
 
 
 # Application definition
@@ -119,7 +119,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = '/'
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://qwdvmwuh:1FJMSTjKKYT7tC87-LulUMVHOyHmjJii@lion.rmq.cloudamqp.com/qwdvmwuh'
