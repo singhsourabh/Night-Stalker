@@ -52,11 +52,12 @@ def ccDate(url):
 
 @shared_task
 def codechefCrawler(username):
-    handler = User.objects.get(codechef=username)
+    
     page  = requests.get('https://www.codechef.com/users/'+username)
     souper = soup(page.content, 'lxml')
     content = souper.find('section', class_='rating-data-section problems-solved')
     entry = 0
+    handler = User.objects.get(codechef=username)
     if content:
         content = content.article
         content = content.findAll('a')

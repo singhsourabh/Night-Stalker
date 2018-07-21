@@ -21,6 +21,8 @@ def add(request):
 	nwUser = NewUser(request.POST)
 	if nwUser.is_valid():
 		nwUser.save()
+		nwUser.last_sync = date.today()
+		nwUser.save()
 		ccName = request.POST['codechef']
 		spojName = request.POST['spoj']
 		cfName = request.POST['codeforce']
