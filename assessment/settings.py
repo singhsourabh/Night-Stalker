@@ -25,7 +25,7 @@ SECRET_KEY = 'yqw&933#rd&ez@-k@k%ll8rt#_cacw)y1qy$fbfhr%d8q+_*+3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nightstalker.herokuapp.com']
+ALLOWED_HOSTS = ['nightstalker.herokuapp.com', '127.0.0.1']
 
 
 # Application definition

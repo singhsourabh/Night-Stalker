@@ -31,7 +31,7 @@ def add(request):
 		if cfName:
 			codeforceCrawler.delay(cfName)
 		print('success')
-	return HttpResponse('')
+	return redirect('dashboard')
 
 def dateQ(request):
 	Fm = request.POST['From']

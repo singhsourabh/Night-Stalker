@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Assessment</title>
+        <title>nightStalker</title>
         <link rel="stylesheet" type="text/css" href="{% static 'dashboard/style.css'%}">
         <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
     </head>
     <body bgcolor="gainsboro">
         <div class="header">
-            <a class="htitle"><b>Assessment</b></a>
+            <a class="htitle"><b>Night Stalker</b></a>
             <font class="welcome" style="float: right;">
             {% if user.is_authenticated %}
             Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
@@ -175,7 +175,6 @@
             {% endfor %}
             {% if not userList %}
             <div style="width: 100%;color:midnightblue"><p style="text-align: center; font-size: 100px; margin-top: 12%; margin-bottom: 0;">NOTHING!!</p><p style="text-align: center; font-size: 50px; margin: 0;">Your list is empty.</p></div>      
-            
             {% endif %}
 
     	</div>
