@@ -28,7 +28,7 @@
       <h2>Add User Details</h2>
     </div>
     <div class="modal-body">
-    	<form method="POST" class="addform">
+    	<form method="POST" class="addform" action="{% url 'add' %}">
     		{% csrf_token %}
     		<p class="inprow"><label for="handle" class="labl">Name: </label>{{UserForm.name}}</p>
     		<p class="inprow"><label for="ccname" class="labl">CodeChef: </label>{{UserForm.codechef}}</p>
@@ -244,29 +244,29 @@
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script type="text/javascript">
-        $(document).on('submit','.addform', function(event){
-            // event.preventDefault();
-            $.ajax({
-                type:'POST',
-                url:'{% url 'add' %}',
-                data:{
-                    name:$('#handle').val(),
-                    codechef:$('#ccname').val(),
-                    spoj:$('#spojname').val(),
-                    codeforce:$('#cfname').val(),
-                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-                },
-                success:function(){
-                    $(".name").load(" .name");
-                    $(".cc").load(" .cc");
-                    $(".spoj").load(" .spoj");
-                    $(".cf").load(" .cf");
-                    $("#content").load(" #content");
-                    //$(".profilec").load(" .profilec");
+        // $(document).on('submit','.addform', function(event){
+        //     // event.preventDefault();
+        //     $.ajax({
+        //         type:'POST',
+        //         url:'{% url 'add' %}',
+        //         data:{
+        //             name:$('#handle').val(),
+        //             codechef:$('#ccname').val(),
+        //             spoj:$('#spojname').val(),
+        //             codeforce:$('#cfname').val(),
+        //             csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        //         },
+        //         success:function(){
+        //             $(".name").load(" .name");
+        //             $(".cc").load(" .cc");
+        //             $(".spoj").load(" .spoj");
+        //             $(".cf").load(" .cf");
+        //             $("#content").load(" #content");
+        //             //$(".profilec").load(" .profilec");
                     
-                }
-            })
-        });
+        //         }
+        //     })
+        // });
         $(".timeRanger").submit(function(et){
             
             var ID = $(this).attr('data');
