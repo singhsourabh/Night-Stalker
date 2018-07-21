@@ -1,0 +1,11 @@
+
+beautifulsoup4==4.6.0
+
+bs4==0.0.1
+celery==4.2.0
+
+Django==2.0.6
+gunicorn==19.9.0
+
+python-dateutil==2.7.3requests==2.19.1
+whitenoise==3.3.1
