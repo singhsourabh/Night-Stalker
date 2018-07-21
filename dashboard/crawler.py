@@ -57,8 +57,9 @@ def codechefCrawler(username):
     souper = soup(page.content, 'lxml')
     content = souper.find('section', class_='rating-data-section problems-solved')
     entry = 0
-    handler = User.objects.get(codechef=username)
+    handler = None
     if content:
+        handler = User.objects.get(codechef=username)
         content = content.article
         content = content.findAll('a')
         for x in content[::-1]:
