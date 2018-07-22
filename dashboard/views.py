@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .forms import NewUser, Modify
-from .models import User, Sj, Cc, Cf
+from .models import UserDetail, Sj, Cc, Cf
 from .crawler import codechefCrawler, spojCrawler, codeforceCrawler, updater
 from dateutil.parser import parse
 from datetime import date, datetime, timedelta
 
 def dash(request):
-	UserList = User.objects.all()
+	UserList = UserDetail.objects.all()
 	ccList = Cc.objects.all()
 	spojList = Sj.objects.all()
 	cfList = Cf.objects.all()
@@ -39,7 +39,7 @@ def dateQ(request):
 	Id = request.POST['id']
 	From = parse(Fm).date()
 	To = parse(T).date()
-	Handler = User.objects.get(name__exact=Id)
+	Handler = UserDetail.objects.get(name__exact=Id)
 	packet = {
 		'cc': Cc.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count(),
 		'spoj': Sj.objects.filter(handle_id=Handler.pk).filter(date__gte=From).filter(date__lte=To).count(),
@@ -52,7 +52,7 @@ def modify(request, userid):
 	nCc = request.POST['mcodechef']
 	nSj = request.POST['mspoj']
 	nCf = request.POST['mcodeforce'] 
-	users = User.objects.get(pk=userid)
+	users = UserDetail.objects.get(pk=userid)
 	ucc = users.codechef
 	usj = users.spoj
 	ucf = users.codeforce
@@ -75,5 +75,5 @@ def modify(request, userid):
 def remove(request):
 	opt = request.POST.getlist('checks[]')
 	for item in opt:
-		User.objects.get(pk=int(item)).delete()
+		UserDetail.objects.get(pk=int(item)).delete()
 	return redirect('dashboard')

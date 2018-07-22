@@ -1,9 +1,9 @@
 from django import forms
-from .models import User
+from .models import UserDetail
 
 class NewUser(forms.ModelForm):
     class Meta:
-        model = User
+        model = UserDetail
         fields = ['name', 'codechef', 'spoj', 'codeforce']
         widgets = {
             'name': forms.TextInput(attrs={'id':'handle', 'class':'name', 'required':'true', 'placeholder':'Enter name'}),

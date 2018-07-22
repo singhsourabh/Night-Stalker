@@ -1,6 +1,6 @@
 from django.db import models
 
-class User(models.Model):
+class UserDetail(models.Model):
     name = models.CharField(max_length=25, unique=True)
     codechef = models.CharField(max_length=25, blank=True, unique=True, null=True,)
     spoj = models.CharField(max_length=25, blank=True, unique=True, null=True,)
@@ -14,7 +14,7 @@ class User(models.Model):
         return self.name
 
 class Sj(models.Model):
-    handle = models.ForeignKey(User, on_delete=models.CASCADE)
+    handle = models.ForeignKey(UserDetail, on_delete=models.CASCADE)
     problem = models.CharField(max_length=50, null=True)
     date = models.DateField()
 
@@ -22,7 +22,7 @@ class Sj(models.Model):
         return self.problem
 
 class Cc(models.Model):
-    handle = models.ForeignKey(User, on_delete=models.CASCADE)
+    handle = models.ForeignKey(UserDetail, on_delete=models.CASCADE)
     problem = models.CharField(max_length=50, null=True)
     date = models.DateField()
 
@@ -30,7 +30,7 @@ class Cc(models.Model):
         return self.problem
 
 class Cf(models.Model):
-    handle = models.ForeignKey(User, on_delete=models.CASCADE)
+    handle = models.ForeignKey(UserDetail, on_delete=models.CASCADE)
     problem = models.CharField(max_length=50, null=True)
     date = models.DateField()
 

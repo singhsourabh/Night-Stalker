@@ -2,7 +2,7 @@ from celery import shared_task
 import requests
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
-from .models import User, Sj, Cc, Cf
+from .models import UserDetail, Sj, Cc, Cf
 from dateutil.parser import parse
 from datetime import date, datetime
 from django.db.models import F
@@ -19,7 +19,7 @@ def getDate(url):
 @shared_task
 def spojCrawler(username):
     url = 'http://www.spoj.com/users/'+username
-    handler = User.objects.get(spoj=username) 
+    handler = UserDetail.objects.get(spoj=username) 
     uClient = uReq(url)
     html = uClient.read()
     uClient.close()
@@ -58,7 +58,7 @@ def codechefCrawler(username):
     content = souper.find('section', class_='rating-data-section problems-solved')
     entry = 0
     try:
-        handler = User.objects.get(codechef=username)
+        handler = UserDetail.objects.get(codechef=username)
     except handler.DoesNotExist:
         handler = None
     if content:
@@ -88,7 +88,7 @@ def codechefCrawler(username):
 
 @shared_task
 def data(url, index, username):
-    handler = User.objects.get(codeforce__exact=username)
+    handler = UserDetail.objects.get(codeforce__exact=username)
     entry = 0
     for x in range(1,index+1):
         uClient = uReq(url+'/page/'+str(x))
@@ -127,7 +127,7 @@ def codeforceCrawler(username):
 
 @shared_task
 def updater():
-    for users in User.objects.all():
+    for users in UserDetail.objects.all():
         if users.last_sync != date.today() and users.last_sync:
 
             #codechef
