@@ -5,16 +5,18 @@
 	<title>Login</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'userauth/style.css'%}">
 	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 <body bgcolor="gainsboro">
 	<div class="header">
 		<a class="htitle" href="{% url 'dashboard' %}"><b>Night Stalker</b></a><font class="welcome" style="float: right;">{% if user.is_authenticated %}
 			Welcome: {{user.username}} <a href="{%url 'logout'%}" class="logout"><b>Logout</b></a>
 			{% else %}
-			Welcome: Guest
+			Welcome: Guest<a id="signup" class="sign"><b>SignUp</b></a>
 			{% endif %}
 		</font>
 	</div>
+	  
 	<div id="box">
 	<div id = "base">
 		{% if user.is_authenticated %}
@@ -35,5 +37,47 @@
 		<div class="wrong">Sorry, unrecognized username or password.</div>
 	{% endif %}
 </div>
+<div id="myModal" class="modal">
+                
+	<div class="modal-content">
+	  <div class="modal-header">
+		<span class="close">&times;</span>
+		<h2>Sign up now</h2>
+	  </div>
+	  <div class="modal-body">
+		  <form method="POST" action="{% url 'register' %}">
+			  {% csrf_token %}
+			  <!-- add content -->
+			<p class="inprow"><label for="handle" class="labl">Username: </label>{{userR.username}}</p>
+			<p class="inprow"><label for="email" class="labl">Email: </label>{{userR.email}}</p>
+    		<p class="inprow"><label for="password" class="labl">Password: </label>{{userR.password}}</p>
+			<p class="inprow"><label for="cpassword" class="labl">Confirm Password: </label>{{userR.confirm_password}}</p><br>
+            <div style="display: block; text-align: center;"><button type="submit" class="register" style="margin-bottom: 10px">ADD</button>
+                <button type="reset" class="add" style="margin-bottom: 10px; background-color: slategray">RESET</button></div>
+		  </form>
+		  	
+	  </div>
+	  <div class="modal-footer"></div>
+		</div>
+	  </div>
+<script>
+	var modal = document.getElementById('myModal');
+            var btn = document.getElementById("signup");
+            var span = document.getElementsByClassName("close")[0];
+
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+</script>
 </body>
 </html>

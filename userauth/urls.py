@@ -3,5 +3,5 @@ from .import views
 
 urlpatterns = [
     path('', views.lin, name='lin'),
-    #path('logout', views.Logout, name='lout')
+    path('register', views.Register, name='register')
 ]

@@ -103,3 +103,124 @@ button{
 	padding: 5px 10px;
 	font-family: 'Josefin Sans', sans-serif;
 }
+
+.modal {
+	color: #406;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content{
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 50%;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	overflow: auto;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close{
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: royalblue;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;
+	height: 300px;
+	overflow: auto;
+}
+
+	
+.modal-footer {
+    padding: 2px 16px;
+    background-color: royalblue;
+    color: white;
+}
+
+.sign{
+	text-decoration: none;
+	border: none;
+	margin-left: 10px;
+	background-color: royalblue;
+	padding: 10px 20px; 
+	color: white;
+	display: inline-block;	
+	cursor: pointer;
+}
+
+form{
+	font-size: 20px;
+}
+p.inprow     { display: table-row;  }
+label.labl { display: table-cell; text-align: right; width:40%; color: rgb(25, 39, 80)}
+
+.uname, .pass, .cpass, .mail{
+	display: table-cell;
+	width:50%;
+	padding: 9px 15px 5px 15px;
+	margin: 10px;
+	border: none;
+	width: 250px;
+	font-family: 'Josefin Sans', sans-serif;
+	border: 3px solid slateblue;
+	-webkit-transition: 0.7s;
+    transition: 0.7s;
+}
+
+.uname:focus, .pass:focus, .cpass:focus, .mail:focus {
+    border: 3px solid indigo;
+}
+
+.register{
+	border: none;
+	text-align: center;
+	padding: 10px 20px;
+	background-color: royalblue;
+	color: cornsilk;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 15px;
+	font-family: 'Josefin Sans', sans-serif;
+	cursor: pointer;
+	border: 2px solid white;
+}
